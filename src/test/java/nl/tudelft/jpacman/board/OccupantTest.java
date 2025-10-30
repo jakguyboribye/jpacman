@@ -2,6 +2,7 @@ package nl.tudelft.jpacman.board;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import nl.tudelft.jpacman.sprite.Sprite;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,8 +32,8 @@ class OccupantTest {
      */
     @Test
     void noStartSquare() {
-        // Remove the following placeholder:
         assertThat(unit).isNotNull();
+        assertThat(unit.hasSquare()).isEqualTo(false);
     }
 
     /**
@@ -41,8 +42,23 @@ class OccupantTest {
      */
     @Test
     void testOccupy() {
-        // Remove the following placeholder:
-        assertThat(unit).isNotNull();
+
+        // square is abstract so gotta do this :(
+        Square cursquare = new Square() {
+            @Override
+            public boolean isAccessibleTo(Unit unit) {
+                return false;
+            }
+
+            @Override
+            public Sprite getSprite() {
+                return null;
+            }
+        };
+
+        unit.occupy(cursquare);          // Unit occupies the square
+
+        assertThat(cursquare).isEqualTo(unit.getSquare());
     }
 
     /**
@@ -51,7 +67,36 @@ class OccupantTest {
      */
     @Test
     void testReoccupy() {
-        // Remove the following placeholder:
-        assertThat(unit).isNotNull();
+        Square sq1 = new Square() {
+            @Override
+            public boolean isAccessibleTo(Unit unit) {
+                return true;
+            }
+
+            @Override
+            public Sprite getSprite() {
+                return null;
+            }
+        };
+
+        Square sq2 = new Square() {
+            @Override
+            public boolean isAccessibleTo(Unit unit) {
+                return true;
+            }
+
+            @Override
+            public Sprite getSprite() {
+                return null;
+            }
+        };
+
+        unit.occupy(sq1);
+        unit.occupy(sq2);
+
+        assertThat(sq1.getOccupants()).isEmpty();
+        assertThat(sq2.getOccupants()).containsExactly(unit);
+        assertThat(unit.getSquare()).isEqualTo(sq2);
     }
+
 }
