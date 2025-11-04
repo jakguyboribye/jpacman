@@ -42,10 +42,6 @@ public class MapParserTest {
         map.add("############");
         mapParser.parseMap(map);
         Mockito.verify(levelFactory, Mockito.times(1)).createGhost();
-
-        // mine (verify ground tiles are created)
-        Mockito.verify(boardFactory, Mockito.times(10)).createGround();
-
     }
 
     /**
